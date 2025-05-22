@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Strength Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .strength {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .tips {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .strength-meter {
+      height: 10px;
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .weak {
+      background-color: red;
+    }
+
+    .moderate {
+      background-color: orange;
+    }
+
+    .strong {
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Password Strength Checker 🔐</h1>
+  <div class="container">
+    <label for="password">Enter a password:</label>
+    <input type="password" id="password" placeholder="Your secure password..." />
+    <div class="strength" id="strengthText">Strength: </div>
+    <div class="strength-meter"><div id="meterFill" class="meter-fill"></div></div>
+    <div class="tips" id="tips"></div>
+  </div>
+
+  <script>
+    const passwordInput = document.getElementById("password");
+    const strengthText = document.getElementById("strengthText");
+    const meterFill = document.getElementById("meterFill");
+    const tips = document.getElementById("tips");
+
+    passwordInput.addEventListener("input", () => {
+      const password = passwordInput.value;
+      const result = checkPasswordStrength(password);
+      updateUI(result);
+    });
+
+    function checkPasswordStrength(password) {
+      let score = 0;
+      let messages = [];
+
+      if (password.length >= 8) score++;
+      else messages.push("Use at least 8 characters");
+
+      if (/[A-Z]/.test(password)) score++;
+      else messages.push("Add at least one uppercase letter");
+
+      if (/[a-z]/.test(password)) score++;
+      else messages.push("Add at least one lowercase letter");
+
+      if (/[0-9]/.test(password)) score++;
+      else messages.push("Include at least one number");
+
+      if (/[\W_]/.test(password)) score++;
+      else messages.push("Include at least one special character (!@#$%^&*)");
+
+      let strength = "Weak";
+      let colorClass = "weak";
+      let width = "20%";
+
+      if (score >= 4) {
+        strength = "Strong";
+        colorClass = "strong";
+        width = "100%";
+      } else if (score === 3) {
+        strength = "Moderate";
+        colorClass = "moderate";
+        width = "60%";
+      }
+
+      return { strength, colorClass, width, messages };
+    }
+
+    function updateUI({ strength, colorClass, width, messages }) {
+      strengthText.textContent = `Strength: ${strength}`;
+      meterFill.className = `meter-fill ${colorClass}`;
+      meterFill.style.width = width;
+
+      tips.innerHTML = "";
+      if (messages.length > 0) {
+        tips.innerHTML = "<strong>Suggestions:</strong><ul>" + messages.map(m => `<li>${m}</li>`).join("") + "</ul>";
+      }
+    }
+  </script>
+</body>
+</html>
