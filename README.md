@@ -22,7 +22,8 @@ A simple and interactive web-based tool that evaluates the strength of a user's 
 
 ## 📸 Screenshot
 
-[in separate file below]
+<img width="924" alt="Screenshot 2025-05-22 at 7 01 12 PM" src="https://github.com/user-attachments/assets/08a0650e-6ec4-498d-badc-7b2c84cce961" />
+
 
 ## 🚀 How to Use
 
